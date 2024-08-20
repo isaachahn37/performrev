@@ -40,7 +40,6 @@ public class ReviewService {
         review.setMetrics(inputReviewRequest.getMetrics());
         review.setComments(inputReviewRequest.getComments());
 
-        // Hardcoded employee info
         EmployeeInfo employeeInfo = new EmployeeInfo();
         employeeInfo.setDepartmentId("dept1");
         employeeInfo.setRole("developer");
@@ -48,7 +47,6 @@ public class ReviewService {
         review.setEmployeeInfo(employeeInfo);
         review.setOverallScore(calculateOverallScore(inputReviewRequest.getMetrics()));
 
-        // Send review to Kafka
         reviewProducer.sendReview(review);
 
         return new InputReviewResponse(review.getId(),"submitted");
@@ -110,7 +108,6 @@ public class ReviewService {
     }
 
     public ResponseEntity<PeerComparison> getPeerComparison(String employeeId) {
-        // Fetch the review of the employee
         Review employeeReview = mongoTemplate.findOne(
                 Query.query(Criteria.where("employeeId").is(employeeId)),
                 Review.class
@@ -122,24 +119,19 @@ public class ReviewService {
 
         double employeeScore = employeeReview.getOverallScore();
 
-        // Aggregation pipeline
         Aggregation aggregation = Aggregation.newAggregation(
-                // Match employees with the same department and role
                 Aggregation.match(Criteria.where("employeeInfo.departmentId").is(employeeReview.getEmployeeInfo().getDepartmentId())
                         .and("employeeInfo.role").is(employeeReview.getEmployeeInfo().getRole())),
 
-                // Project a new field for comparison (1 if score is below employeeScore, 0 otherwise)
                 Aggregation.project("overallScore")
                         .and(ConditionalOperators.Cond.when(Criteria.where("overallScore").lt(employeeScore)).then(1).otherwise(0)).as("belowCount"),
 
-                // Group and calculate peer average score, count of below scores, and total peers
                 Aggregation.group()
                         .avg("overallScore").as("peerAverageScore")
                         .sum("belowCount").as("belowCount")
                         .count().as("totalPeers")
         );
 
-        // Execute aggregation
         AggregationResults<Map> results = mongoTemplate.aggregate(aggregation, "reviews", Map.class);
         Map<String, Object> result = results.getUniqueMappedResult();
 
@@ -147,12 +139,10 @@ public class ReviewService {
             return ResponseEntity.internalServerError().build();
         }
 
-        // Extract results from aggregation
         double peerAverageScore = (double) result.get("peerAverageScore");
         long belowCount = ((Number) result.get("belowCount")).longValue();
         long totalPeers = ((Number) result.get("totalPeers")).longValue();
 
-        // Calculate percentile rank
         double percentileRank = ((double) belowCount / totalPeers) * 100;
 
 
