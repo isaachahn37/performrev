@@ -1,0 +1,143 @@
+{
+	"info": {
+		"_postman_id": "14fcaf76-3b23-4fcf-ab16-e446d0960cdf",
+		"name": "PERFORMANCE REVIEW",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "241385"
+	},
+	"item": [
+		{
+			"name": "REVIEW POSTING",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"employeeId\":\"123\",\n\t\"averageScore\":87,\n\t\"departmentId\":\"dept1\",\n\t\"reviews\":[\n\t{\n\t\"reviewDate\":\"2023-10-01\",\n\t\"metrics\":\n\t\t{\n\t\t\"goalachievement\": 80,\n\t\t\"skillLevel\": 90,\n\t\t\"teamwork\" : 90\n\t\t},\n\t\"comments\" : \"good\",\n\t\"overallScore\" : 85.4\n\t},\n\t{\n\t\"reviewDate\":\"2023-10-02\",\n\t\"metrics\":\n\t\t{\n\t\t\"goalachievement\": 80,\n\t\t\"skillLevel\": 90,\n\t\t\"teamwork\" : 90\n\t\t},\n\t\"comments\" : \"great\",\n\t\"overallScore\" : 87.3\n\t}\n\t],\n\t\"trends\": {\n\t\t\"lastquarter\":85, //is the average of overallScore on last quarter over all employee\n\t\t\"lastYear\": 80 // is the average of overallScore on last Year over all employee\n\t}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/reviews",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"reviews"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Data populator",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/data-populator/generate",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"data-populator",
+						"generate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get performance report",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyZnJlZWxhbmNlciIsImlhdCI6MTcxOTQxNjIyNiwiZXhwIjoxNzE5NTAyNjI2fQ.m_31Xk4TS0MYkFtf4nUxqCmuLl2OCCgenbW5kCLufTw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/employees/emp20/performance",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"employees",
+						"emp20",
+						"performance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get PEER COMPARISON",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyZnJlZWxhbmNlciIsImlhdCI6MTcxOTQxNjIyNiwiZXhwIjoxNzE5NTAyNjI2fQ.m_31Xk4TS0MYkFtf4nUxqCmuLl2OCCgenbW5kCLufTw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/employees/emp20/peer-comparison",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"employees",
+						"emp20",
+						"peer-comparison"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Department Summary",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/departments/dept1/performance-summary",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"departments",
+						"dept1",
+						"performance-summary"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

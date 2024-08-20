@@ -38,3 +38,12 @@ Run your docker image
 ```
 docker run -d   --name performrev   -p 8080:8080   --link kafka   --link mongo   performrev
 ```
+
+### Sample Payload
+
+Please check PostmanCollection.json to check all sample URL
+
+to  populate data, you can hit :
+```
+localhost:8080/data-populator/generate
+```
